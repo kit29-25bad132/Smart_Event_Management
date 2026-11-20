@@ -1,0 +1,6 @@
+services:
+  # Phase 0 intentionally has no active containers. Future services are reserved.
+  foundation-placeholder:
+    image: alpine:3.20
+    profiles: ["future"]
+    command: ["sh", "-c", "echo Phase 0 has no active Docker services"]

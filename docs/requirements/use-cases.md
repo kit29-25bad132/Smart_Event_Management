@@ -1,0 +1,4 @@
+# Use cases
+
+UC-01 Register/login: actor submits credentials; system validates, hashes or verifies password, and returns JWT. UC-02 Manage event: ADMIN validates venue/time/capacity and creates, updates, or cancels event. UC-03 Search events: actor supplies filters and receives paginated results. UC-04 Register: authenticated participant selects event; transaction locks event capacity, rejects duplicate/full/cancelled state, and creates registration. UC-05 Cancel registration: owner or ADMIN cancels active registration. UC-06 Ask policy: assistant retrieves approved chunks and cites sources. UC-07 Agent action: assistant classifies intent, authorizes a tool, validates arguments, executes business service, and summarizes outcome. UC-08 Monitor: ADMIN views redacted audit and agent activity.
+

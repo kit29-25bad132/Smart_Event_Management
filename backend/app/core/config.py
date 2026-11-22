@@ -6,6 +6,10 @@ class Settings(BaseSettings):
     environment: str = "development"
     log_level: str = "INFO"
     backend_cors_origins: str = "http://localhost:3000"
+    database_url: str = "postgresql+psycopg://smart_event:change-me@localhost:5432/smart_event_management"
+    jwt_secret_key: str = "development-only-change-me"
+    jwt_algorithm: str = "HS256"
+    jwt_access_token_expire_minutes: int = 30
     model_config = SettingsConfigDict(env_file=".env", extra="ignore", case_sensitive=False)
 
     @property

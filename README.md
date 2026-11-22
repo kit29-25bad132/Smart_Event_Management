@@ -8,8 +8,11 @@ Phase 0 establishes the development foundation for an internship project that wi
 - FastAPI application with `/api/health` and `/api/ready`
 - Environment-based frontend API URL and backend CORS
 - Basic backend tests and Windows PowerShell setup documentation
+- Phase 2 non-AI backend foundation: PostgreSQL/SQLAlchemy/Alembic design, JWT authentication, RBAC, venues, events and registrations
 
 Domain features, authentication, database, AI agents, RAG, dashboards, and deployment are planned only.
+
+Phase 2 now implements the non-AI domain backend. AI agents, RAG, embeddings, notifications, and frontend product screens remain planned.
 
 ## Stack
 
@@ -24,3 +27,5 @@ Windows PowerShell, Git, Node.js 24+, npm 11+, Python 3.12–3.14, and optionall
 Backend: `cd backend; .venv\Scripts\Activate.ps1; pytest`. Frontend: `cd frontend; npm run typecheck; npm run build`. Run both applications to verify the browser status card reports `connected`.
 
 See [docs/architecture.md](docs/architecture.md) and [docs/development-roadmap.md](docs/development-roadmap.md).
+
+Backend implementation details are in [docs/backend/backend-setup.md](docs/backend/backend-setup.md).

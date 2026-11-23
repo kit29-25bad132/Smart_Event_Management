@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
+from fastapi import HTTPException
 from app.db.session import get_db
 from app.core.dependencies import get_current_user, require_admin
 from app.core.security import hash_password
@@ -14,6 +16,15 @@ def list_users(db: Session = Depends(get_db), _: User = Depends(require_admin)):
 def profile(user=Depends(get_current_user)): return user
 @router.patch("/me", response_model=UserOut)
 def update_profile(data: UserUpdate, user=Depends(get_current_user), db: Session = Depends(get_db)):
-    if data.email is not None: user.email = data.email.lower().strip()
+    if data.email is not None:
+        normalized = data.email.lower().strip()
+        existing = db.scalar(select(User).where(User.email == normalized, User.id != user.id))
+        if existing: raise HTTPException(409, "Email is already registered")
+        user.email = normalized
     if data.password is not None: user.password_hash = hash_password(data.password)
-    db.commit(); db.refresh(user); return user
+    try:
+        db.commit()
+    except IntegrityError as exc:
+        db.rollback()
+        raise HTTPException(409, "Email is already registered") from exc
+    db.refresh(user); return user

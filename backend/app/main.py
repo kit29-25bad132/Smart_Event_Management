@@ -4,7 +4,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import get_settings
 from sqlalchemy import text
-from fastapi import Request
+from fastapi import Request, HTTPException
+from fastapi.exceptions import RequestValidationError
+from sqlalchemy.exc import IntegrityError
 from fastapi.responses import JSONResponse
 from app.db.session import engine
 from app.api import auth, users, venues, events, registrations
@@ -28,6 +30,21 @@ async def unhandled(_: Request, exc: Exception):
     logger.exception("Unhandled application error")
     return JSONResponse(status_code=500, content={"error": {"code": "INTERNAL_ERROR", "message": "An internal error occurred"}})
 
+def _error(code: str, message: str, request: Request, details=None):
+    return {"error": {"code": code, "message": message, "request_id": request.headers.get("X-Request-ID", "unassigned"), "details": details or {}}}
+
+@app.exception_handler(HTTPException)
+async def http_error(request: Request, exc: HTTPException):
+    return JSONResponse(status_code=exc.status_code, headers=exc.headers, content=_error(f"HTTP_{exc.status_code}", str(exc.detail), request))
+
+@app.exception_handler(RequestValidationError)
+async def validation_error(request: Request, exc: RequestValidationError):
+    return JSONResponse(status_code=422, content=_error("VALIDATION_ERROR", "Request validation failed", request, exc.errors()))
+
+@app.exception_handler(IntegrityError)
+async def integrity_error(request: Request, _: IntegrityError):
+    return JSONResponse(status_code=409, content=_error("INTEGRITY_CONFLICT", "The requested change conflicts with existing data", request))
+
 @app.get("/api/health", tags=["system"])
 async def health() -> dict[str, str]:
     return {"application": settings.app_name, "status": "healthy"}
@@ -38,7 +55,6 @@ async def ready() -> dict[str, str]:
         with engine.connect() as connection: connection.execute(text("SELECT 1"))
     except Exception as exc:
         logger.warning("Readiness database check failed: %s", type(exc).__name__)
-        from fastapi import HTTPException
         raise HTTPException(status_code=503, detail="Database is unavailable") from exc
     return {"application": settings.app_name, "status": "ready"}
 

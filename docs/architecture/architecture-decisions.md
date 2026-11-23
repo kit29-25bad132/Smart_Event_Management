@@ -10,6 +10,6 @@
 | ADR-006 | LangGraph | Proposed | Explicit stateful workflows and conditional edges |
 | ADR-007 | pgvector | Proposed | Co-located semantic retrieval; external vector DB alternative |
 | ADR-008 | JWT access tokens | Proposed | Stateless API authorization; secure cookie/session alternative |
-| ADR-009 | LLM/embedding provider | Pending | Depends on cost, data residency and internship approval; no provider assumed |
-| ADR-010 | Deployment hosting | Pending | Compare managed frontend/API/Postgres options after constraints are known |
+| ADR-009 | LLM/embedding provider | Approved deferral | Project owner; select before provider-specific Phase 3 development. Interim provider abstraction, configurable credentials and no hard-coded provider dependency. |
+| ADR-010 | Deployment hosting | Approved deferral | Project owner; select before deployment-specific implementation. Interim portable/container-ready design with environment-based configuration. |
 

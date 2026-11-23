@@ -24,7 +24,7 @@ Windows PowerShell, Git, Node.js 24+, npm 11+, Python 3.12–3.14, and optionall
 
 ## Validation
 
-Backend: `cd backend; .venv\Scripts\Activate.ps1; pytest`. Frontend: `cd frontend; npm run typecheck; npm run build`. Run both applications to verify the browser status card reports `connected`.
+Backend (Windows): `cd backend; .venv\Scripts\Activate.ps1; python -m pytest -v`. Backend (WSL2): `cd /mnt/c/Users/kit29/Desktop/Smart_Event_Management/backend; uv sync --locked --extra dev; uv run python -m pytest -v`. Frontend: `cd frontend; npm run typecheck; npm run build`. A successful readiness check additionally requires a configured, reachable development PostgreSQL database. Run both applications to verify the browser status card reports `connected`.
 
 See [docs/architecture.md](docs/architecture.md) and [docs/development-roadmap.md](docs/development-roadmap.md).
 
